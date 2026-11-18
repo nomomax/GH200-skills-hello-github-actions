@@ -1,0 +1,26 @@
+name: Schedule Hello World
+
+on:
+  # 1. 定時排程觸發（注意：採用 UTC 時區）
+  schedule:
+    # 每天 UTC 01:00 執行 ＝ 台灣時間 (UTC+8) 早上 09:00
+    - cron: '35 2 * * *'
+
+  # 2. 教學測試小技巧：加上手動觸發，不用等時間到也能立刻驗證
+  workflow_dispatch:
+
+jobs:
+  daily-check:
+    name: 每日定時檢查
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 印出執行時間與問候語
+        run: |
+          echo "早安！定時排程任務已啟動"
+          echo "目前伺服器時間 (UTC)：$(date -u)"
+          echo "觸發方式：${{ github.event_name }}"
+
+      - name: 模擬網站健康檢查 (檢查 GitHub 狀態)
+        run: |
+          curl -I -s https://www.githubstatus.com | head -n 1
